@@ -66,16 +66,16 @@ def download_binary():
     url = ""
 
     if os_name == "linux" and arch == "x86_64":
-        url = "https://github.com/Musixal/Backhaul/releases/download/v0.6.5/backhaul_linux_amd64.tar.gz"
+        url = "http://github.com/Musixal/Backhaul/releases/download/v0.6.5/backhaul_linux_amd64.tar.gz"
         file_name = "/tmp/backhaul_linux_amd64.tar.gz"
     elif os_name == "linux" and arch == "aarch64":
-        url = "https://github.com/Musixal/Backhaul/releases/download/v0.6.5/backhaul_linux_arm64.tar.gz"
+        url = "http://github.com/Musixal/Backhaul/releases/download/v0.6.5/backhaul_linux_arm64.tar.gz"
         file_name = "/tmp/backhaul_linux_arm64.tar.gz"
     elif os_name == "darwin" and arch == "x86_64":
-        url = "https://github.com/Musixal/Backhaul/releases/download/v0.6.5/backhaul_darwin_amd64.tar.gz"
+        url = "http://github.com/Musixal/Backhaul/releases/download/v0.6.5/backhaul_darwin_amd64.tar.gz"
         file_name = "/tmp/backhaul_darwin_amd64.tar.gz"
     elif os_name == "darwin" and arch == "arm64":
-        url = "https://github.com/Musixal/Backhaul/releases/download/v0.6.5/backhaul_darwin_arm64.tar.gz"
+        url = "http://github.com/Musixal/Backhaul/releases/download/v0.6.5/backhaul_darwin_arm64.tar.gz"
         file_name = "/tmp/backhaul_darwin_arm64.tar.gz"
     else:
         print("\033[91mOS or arch Unsupported\033[0m ")
