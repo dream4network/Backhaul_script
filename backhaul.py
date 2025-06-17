@@ -40,46 +40,41 @@ def logo():
 
     return None
 
-def get_linux_package_manager():
-    try:
-        with open('/etc/os-release') as f:
-            os_release = f.read().lower()
-            if 'ubuntu' in os_release or 'debian' in os_release:
-                return 'apt'
-            elif 'centos' in os_release or 'rhel' in os_release or 'fedora' in os_release or 'rocky' in os_release:
-                return 'dnf' if shutil.which('dnf') else 'yum'
-    except FileNotFoundError:
-        return None
-    return None
+def is_command_available(command):
+    return shutil.which(command) is not None
 
 def install_prerequisites():
     print("\033[93mInstalling prerequisites...\033[0m")
-
+    
     if platform.system() == "Linux":
-        pkg_mgr = get_linux_package_manager()
-        print(f"\033[94mDetected package manager: {pkg_mgr}\033[0m")  # Debugging output
-
-        if pkg_mgr == 'apt':
+        if is_command_available("apt"):
+            loading_bar("\033[93mUpdating (APT)\033[0m")
             subprocess.run(['sudo', 'apt', 'update', '-y'], check=True)
+            loading_bar("\033[93mInstalling wget, curl, unzip, and tar (APT)\033[0m")
             subprocess.run(['sudo', 'apt', 'install', '-y', 'wget', 'curl', 'unzip', 'tar'], check=True)
-
-        elif pkg_mgr == 'dnf':
+        
+        elif is_command_available("dnf"):
+            loading_bar("\033[93mUpdating (DNF)\033[0m")
             subprocess.run(['sudo', 'dnf', 'makecache'], check=True)
+            loading_bar("\033[93mInstalling wget, curl, unzip, and tar (DNF)\033[0m")
             subprocess.run(['sudo', 'dnf', 'install', '-y', 'wget', 'curl', 'unzip', 'tar'], check=True)
-
-        elif pkg_mgr == 'yum':
+        
+        elif is_command_available("yum"):
+            loading_bar("\033[93mUpdating (YUM)\033[0m")
             subprocess.run(['sudo', 'yum', 'makecache'], check=True)
+            loading_bar("\033[93mInstalling wget, curl, unzip, and tar (YUM)\033[0m")
             subprocess.run(['sudo', 'yum', 'install', '-y', 'wget', 'curl', 'unzip', 'tar'], check=True)
-
+        
         else:
-            print("\033[91mUnsupported or unrecognized Linux distribution.\033[0m")
+            print("\033[91mUnsupported Linux package manager. Only apt, yum, and dnf are supported.\033[0m")
             exit(1)
 
     elif platform.system() == "Darwin":
+        loading_bar("\033[93mInstalling wget, curl, unzip, and gnu-tar (Homebrew)\033[0m")
         subprocess.run(['brew', 'install', 'wget', 'curl', 'unzip', 'gnu-tar'], check=True)
 
     else:
-        print("\033[91mWindows is not supported.\033[0m")
+        print("\033[91mWindows is not supported..\033[0m")
         exit(1)
 
 def loading_bar(task):
