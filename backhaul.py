@@ -41,14 +41,34 @@ def logo():
     return None
 def install_prerequisites():
     print("\033[93mInstalling prerequisites...\033[0m")
+
     if platform.system() == "Linux":
-        loading_bar("\033[93mUpdating\033[0m")
-        subprocess.run(['sudo', 'apt', 'update', '-y'], check=True)
-        loading_bar("\033[93mInstalling wget, curl, unzip, and tar\033[0m")
-        subprocess.run(['sudo', 'apt', 'install', '-y', 'wget', 'curl', 'unzip', 'tar'], check=True)
+        if is_command_available("apt"):
+            loading_bar("\033[93mUpdating (APT)\033[0m")
+            subprocess.run(['sudo', 'apt', 'update', '-y'], check=True)
+            loading_bar("\033[93mInstalling wget, curl, unzip, and tar (APT)\033[0m")
+            subprocess.run(['sudo', 'apt', 'install', '-y', 'wget', 'curl', 'unzip', 'tar'], check=True)
+        
+        elif is_command_available("dnf"):
+            loading_bar("\033[93mUpdating (DNF)\033[0m")
+            subprocess.run(['sudo', 'dnf', 'makecache'], check=True)
+            loading_bar("\033[93mInstalling wget, curl, unzip, and tar (DNF)\033[0m")
+            subprocess.run(['sudo', 'dnf', 'install', '-y', 'wget', 'curl', 'unzip', 'tar'], check=True)
+        
+        elif is_command_available("yum"):
+            loading_bar("\033[93mUpdating (YUM)\033[0m")
+            subprocess.run(['sudo', 'yum', 'makecache'], check=True)
+            loading_bar("\033[93mInstalling wget, curl, unzip, and tar (YUM)\033[0m")
+            subprocess.run(['sudo', 'yum', 'install', '-y', 'wget', 'curl', 'unzip', 'tar'], check=True)
+        
+        else:
+            print("\033[91mUnsupported Linux package manager. Only apt, yum, and dnf are supported.\033[0m")
+            exit(1)
+
     elif platform.system() == "Darwin":
-        loading_bar("\033[93mInstalling wget, curl, unzip, and gnu-tar\033[0m")
+        loading_bar("\033[93mInstalling wget, curl, unzip, and gnu-tar (Homebrew)\033[0m")
         subprocess.run(['brew', 'install', 'wget', 'curl', 'unzip', 'gnu-tar'], check=True)
+
     else:
         print("\033[91mWindows is not supported..\033[0m")
         exit(1)
